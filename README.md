@@ -72,12 +72,3 @@ streamlit run app.py
 
 The app will launch locally in the browser at the Streamlit URL shown in the terminal.
 
-## Notes for GitHub Upload
-
-This repository is prepared for GitHub upload as a standard Python project:
-- source files are organized under [src](src),
-- the app entry point is [app.py](app.py),
-- dependencies are listed in [requirements.txt](requirements.txt),
-- and the dataset is included in [train.csv](train.csv).
-
-No files are uploaded to GitHub from this session.
