@@ -28,12 +28,9 @@ def build_subcategory_features(df: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
         .rename(columns={config.COL_ORDER_DATE: "Year"})
     )
-    growth_rows = []
-    for subcat, sub in yearly.groupby(config.COL_SUBCATEGORY):
-        sub = sub.sort_values("Year")
-        yoy = sub["Sales"].pct_change().dropna() * 100
-        growth_rows.append({config.COL_SUBCATEGORY: subcat, "AvgYoYGrowth": yoy.mean() if len(yoy) else 0.0})
-    growth = pd.DataFrame(growth_rows).set_index(config.COL_SUBCATEGORY)["AvgYoYGrowth"]
+    yearly_sorted = yearly.sort_values([config.COL_SUBCATEGORY, "Year"])
+    yearly_sorted["YoY"] = yearly_sorted.groupby(config.COL_SUBCATEGORY)["Sales"].pct_change() * 100
+    growth = yearly_sorted.groupby(config.COL_SUBCATEGORY)["YoY"].mean().fillna(0.0).rename("AvgYoYGrowth")
     features = pd.concat([total_volume, growth, volatility, avg_order_value], axis=1)
     return features.fillna(0)
 
